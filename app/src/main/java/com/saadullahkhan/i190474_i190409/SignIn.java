@@ -1,6 +1,7 @@
 package com.saadullahkhan.i190474_i190409;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -24,6 +26,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignIn extends AppCompatActivity {
     TextView show ;
@@ -51,12 +56,11 @@ public class SignIn extends AppCompatActivity {
         signIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if(TextUtils.isEmpty(password.getText()) || TextUtils.isEmpty(number.getText())){
                     Toast.makeText(getApplicationContext(),"Input Invalid",Toast.LENGTH_LONG).show();
-
                 }else{
-                    RequestQueue queue= Volley.newRequestQueue(getApplicationContext());
-                    StringRequest request=new StringRequest(Request.Method.GET, "http://192.168.0.101/assignment_3/get.php",
+                    StringRequest request=new StringRequest(Request.Method.POST, "http://192.168.0.101/assignment_3/get.php",
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
@@ -64,15 +68,10 @@ public class SignIn extends AppCompatActivity {
                                         JSONObject obj=new JSONObject(response);
                                         if(obj.getInt("code")==1)
                                         {
-                                            JSONArray contacts=obj.getJSONArray("contacts");
-                                            for (int i=0; i<contacts.length();i++)
-                                            {
-                                                JSONObject contact=contacts.getJSONObject(i);
-                                                String id = contact.getString("id");
+                                                String id = obj.getString("id");
                                                 Intent intent = new Intent(SignIn.this,Home.class);
                                                 intent.putExtra("id",id);
                                                 startActivity(intent);
-                                            }
 
                                         }
                                         else{
@@ -80,6 +79,7 @@ public class SignIn extends AppCompatActivity {
                                         }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
+                                        Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_LONG).show();
                                     }
                                 }
                             },
@@ -88,8 +88,17 @@ public class SignIn extends AppCompatActivity {
                                 public void onErrorResponse(VolleyError error) {
                                     Toast.makeText(getApplicationContext(),"Error Connecting Server",Toast.LENGTH_LONG).show();
                                 }
-                            });
-
+                            }){
+                        @Nullable
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> params=new HashMap<>();
+                            params.put("phone_number",number.getText().toString());
+                            params.put("password",password.getText().toString());
+                            return params;
+                        }
+                    };
+                    RequestQueue queue= Volley.newRequestQueue(getApplicationContext());
                     queue.add(request);
 
 
@@ -114,10 +123,5 @@ public class SignIn extends AppCompatActivity {
                 password.setTransformationMethod(PasswordTransformationMethod.getInstance());
             }
         });
-    }
-    @Override
-    protected void onStart() {
-        super.onStart();
-
     }
 }
