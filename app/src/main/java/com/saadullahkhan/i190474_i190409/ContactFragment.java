@@ -57,7 +57,7 @@ public class ContactFragment extends Fragment {
         }
         contactsRecycler = getView().findViewById(R.id.contactsRecycler);
         for(int i=0 ; i< numbers.size();i++){
-            ls.add(new User("name....", numbers.get(i), null));
+            ls.add(new User("name....", numbers.get(i), null,null));
         }
 
         chatListAdapter = new ChatListAdapter(ls, getActivity());

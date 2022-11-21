@@ -14,6 +14,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class SignIn extends AppCompatActivity {
     TextView show ;
     TextView hide ;
@@ -44,9 +55,44 @@ public class SignIn extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Input Invalid",Toast.LENGTH_LONG).show();
 
                 }else{
+                    RequestQueue queue= Volley.newRequestQueue(getApplicationContext());
+                    StringRequest request=new StringRequest(Request.Method.GET, "http://192.168.0.101/assignment_3/get.php",
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    try {
+                                        JSONObject obj=new JSONObject(response);
+                                        if(obj.getInt("code")==1)
+                                        {
+                                            JSONArray contacts=obj.getJSONArray("contacts");
+                                            for (int i=0; i<contacts.length();i++)
+                                            {
+                                                JSONObject contact=contacts.getJSONObject(i);
+                                                String id = contact.getString("id");
+                                                Intent intent = new Intent(SignIn.this,Home.class);
+                                                intent.putExtra("id",id);
+                                                startActivity(intent);
+                                            }
+
+                                        }
+                                        else{
+                                            Toast.makeText(getApplicationContext(),"Enter Correct Credentials",Toast.LENGTH_LONG).show();
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(getApplicationContext(),"Error Connecting Server",Toast.LENGTH_LONG).show();
+                                }
+                            });
+
+                    queue.add(request);
 
 
-                            startActivity(new Intent(SignIn.this,Home.class));
 
 
                 }

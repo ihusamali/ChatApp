@@ -63,6 +63,16 @@
             android:textColor="@color/white"
             android:textSize="40sp" />
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="center">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/dpSignUp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/image_icon"/>
+    </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
