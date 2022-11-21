@@ -19,4 +19,7 @@ public class Home extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerChat,new ContactFragment(),"Contacts").commit();
         bottomNav.getMenu().findItem(R.id.bcContact).setChecked(true);
     }
+    public String getId(){
+        return id;
+    }
 }
