@@ -76,6 +76,8 @@ public class ContactFragment extends Fragment {
         while (phones.moveToNext()) {
             int index = phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
             String phoneNumber = phones.getString(index);
+            phoneNumber =  phoneNumber.replace(" ","");
+            phoneNumber =  phoneNumber.replace("-","");
             phoneNumber =  phoneNumber.replace("+92","0");
             phoneNumber = "+92" + phoneNumber;
             phoneNumber = phoneNumber.replace("+920","+92");
