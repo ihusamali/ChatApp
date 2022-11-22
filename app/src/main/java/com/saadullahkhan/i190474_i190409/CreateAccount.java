@@ -50,7 +50,6 @@ public class CreateAccount extends AppCompatActivity {
     Bitmap bitmap;
     ImageView dp;
     Uri dpp;
-    String sendDp;
     ActivityResultLauncher<Intent> startForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
@@ -58,15 +57,6 @@ public class CreateAccount extends AppCompatActivity {
                 if(result.getData()!=null) {
                     dpp = result.getData().getData();
                     dp.setImageURI(dpp);
-                    try {
-                        bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), dpp);
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.JPEG,80,stream);
-                        bytes = stream.toByteArray();
-                        sendDp = Base64.getEncoder().encodeToString(bytes);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }
             }
         }
@@ -113,6 +103,14 @@ public class CreateAccount extends AppCompatActivity {
                 if(dpp==null){
                     Toast.makeText(getApplicationContext(),"Please Select Image",Toast.LENGTH_LONG).show();
                 }else if(!name.getText().toString().equals("") && !number.getText().toString().equals("") && !password.getText().toString().equals("")) {
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), dpp);
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG,80,stream);
+                        bytes = stream.toByteArray();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     StringRequest request=new StringRequest(
                             Request.Method.POST,
                             "http://192.168.0.101/assignment_3/insert.php",
@@ -163,24 +161,9 @@ public class CreateAccount extends AppCompatActivity {
                             params.put("name",name.getText().toString());
                             params.put("phone_number",number.getText().toString());
                             params.put("password",password.getText().toString());
-                            params.put("dp",sendDp );
+                            params.put("dp",Base64.getEncoder().encodeToString(bytes));
                             return params;
                         }
-
-//                        @Override
-//                        public byte[] getBody() throws AuthFailureError {
-//                            JSONObject js = new JSONObject();
-//                            try {
-//                                js.put("name",name.getText().toString());
-//                                js.put("phone_number",number.getText().toString());
-//                                js.put("password",password.getText().toString());
-//                                js.put("dp", bytes);
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//
-//                            return js.toString().getBytes();
-//                        }
                     };
                     RequestQueue queue= Volley.newRequestQueue(getApplicationContext());
                     queue.add(request);
