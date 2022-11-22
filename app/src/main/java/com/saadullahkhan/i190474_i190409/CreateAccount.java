@@ -35,6 +35,8 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.Blob;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,10 +46,11 @@ public class CreateAccount extends AppCompatActivity {
     EditText password,name,number;
     TextView signIn;
     Button signUp;
-//    byte[] bytes;
+    byte[] bytes;
     Bitmap bitmap;
     ImageView dp;
     Uri dpp;
+    String sendDp;
     ActivityResultLauncher<Intent> startForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
@@ -55,6 +58,15 @@ public class CreateAccount extends AppCompatActivity {
                 if(result.getData()!=null) {
                     dpp = result.getData().getData();
                     dp.setImageURI(dpp);
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), dpp);
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG,80,stream);
+                        bytes = stream.toByteArray();
+                        sendDp = Base64.getEncoder().encodeToString(bytes);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
@@ -71,6 +83,7 @@ public class CreateAccount extends AppCompatActivity {
         number = findViewById(R.id.numberSignUp);
         signIn=findViewById(R.id.signInSignUp);
         dp = findViewById(R.id.dpSignUp);
+
         signUp = findViewById(R.id.signUpButton);
         signIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,14 +113,6 @@ public class CreateAccount extends AppCompatActivity {
                 if(dpp==null){
                     Toast.makeText(getApplicationContext(),"Please Select Image",Toast.LENGTH_LONG).show();
                 }else if(!name.getText().toString().equals("") && !number.getText().toString().equals("") && !password.getText().toString().equals("")) {
-                    try {
-                        bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), dpp);
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.JPEG,80,stream);
-//                        bytes = stream.toByteArray();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                     StringRequest request=new StringRequest(
                             Request.Method.POST,
                             "http://192.168.0.101/assignment_3/insert.php",
@@ -118,7 +123,9 @@ public class CreateAccount extends AppCompatActivity {
                                         JSONObject obj=new JSONObject(response);
                                         if(obj.getInt("code")==1)
                                         {
-                                            startActivity(new Intent(CreateAccount.this, Home.class));
+                                            Intent intent = new Intent(CreateAccount.this, Home.class);
+                                            intent.putExtra("id",obj.getString("id"));
+                                            startActivity(intent);
                                         }
                                         else{
                                             Toast.makeText(
@@ -132,7 +139,7 @@ public class CreateAccount extends AppCompatActivity {
 
                                         Toast.makeText(
                                                 getApplicationContext(),
-                                                "Incorrect JSON"
+                                                "Incorrect JSON "+e
                                                 ,Toast.LENGTH_LONG
                                         ).show();
                                     }
@@ -156,9 +163,24 @@ public class CreateAccount extends AppCompatActivity {
                             params.put("name",name.getText().toString());
                             params.put("phone_number",number.getText().toString());
                             params.put("password",password.getText().toString());
-                            params.put("dp",bitmap.toString());
+                            params.put("dp",sendDp );
                             return params;
                         }
+
+//                        @Override
+//                        public byte[] getBody() throws AuthFailureError {
+//                            JSONObject js = new JSONObject();
+//                            try {
+//                                js.put("name",name.getText().toString());
+//                                js.put("phone_number",number.getText().toString());
+//                                js.put("password",password.getText().toString());
+//                                js.put("dp", bytes);
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//
+//                            return js.toString().getBytes();
+//                        }
                     };
                     RequestQueue queue= Volley.newRequestQueue(getApplicationContext());
                     queue.add(request);
