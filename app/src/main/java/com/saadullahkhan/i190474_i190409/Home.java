@@ -58,7 +58,7 @@ public class Home extends AppCompatActivity {
         dp =  header.findViewById(R.id.dpNav);
         drawerLayout = findViewById(R.id.drawerLayout);
         id = getIntent().getStringExtra("id");
-        StringRequest request=new StringRequest(Request.Method.POST, "http://192.168.0.101/assignment_3/getdp.php",
+        StringRequest request=new StringRequest(Request.Method.POST, "http://192.168.0.124/assignment_3/getdp.php",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

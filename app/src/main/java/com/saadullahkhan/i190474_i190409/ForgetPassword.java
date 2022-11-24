@@ -1,6 +1,5 @@
 package com.saadullahkhan.i190474_i190409;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,95 +22,77 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class SignIn extends AppCompatActivity {
+public class ForgetPassword extends AppCompatActivity {
     TextView show ;
     TextView hide ;
     EditText password,number;
-    TextView signUp,forgetPassword;
-    Button signIn;
+    TextView signIn;
+    Button update;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
-        show = findViewById(R.id.showSignIn);
-        hide = findViewById(R.id.hideSignIn);
-        password = findViewById(R.id.passwordSignIn);
-        number = findViewById(R.id.numberSignIn);
-        signUp = findViewById(R.id.signUpSignIn);
-        signIn = findViewById(R.id.signInButton);
-        forgetPassword = findViewById(R.id.forgetPassword);
-        forgetPassword.setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.activity_forget_password);
+        show = findViewById(R.id.showForgetPassword);
+        hide = findViewById(R.id.hideForgetPassword);
+        password = findViewById(R.id.passwordForgetPassword);
+        number = findViewById(R.id.numberForgetPassword);
+        update = findViewById(R.id.updateForgetPassword);
+        signIn = findViewById(R.id.forgetPasswordSignIn);
+        update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(SignIn.this,ForgetPassword.class));
-            }
-        });
-        signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(SignIn.this, CreateAccount.class));
-            }
-        });
-        signIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
                 if(TextUtils.isEmpty(password.getText()) || TextUtils.isEmpty(number.getText())){
                     Toast.makeText(getApplicationContext(),"Input Invalid",Toast.LENGTH_LONG).show();
-                }else{
-                    StringRequest request=new StringRequest(Request.Method.POST, "http://192.168.0.124/assignment_3/get.php",
+                }else {
+                    StringRequest request = new StringRequest(Request.Method.POST, "http://192.168.0.124/assignment_3/forget.php",
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
                                     try {
-                                        JSONObject obj=new JSONObject(response);
-                                        if(obj.getInt("code")==1)
-                                        {
-                                                String id = obj.getString("id");
-                                                Intent intent = new Intent(SignIn.this,Home.class);
-                                                intent.putExtra("id",id);
-                                                startActivity(intent);
-
-                                        }
-                                        else{
-                                            Toast.makeText(getApplicationContext(),"Enter Correct Credentials",Toast.LENGTH_LONG).show();
+                                        JSONObject obj = new JSONObject(response);
+                                        if (obj.getInt("code") == 1) {
+                                            finish();
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "Enter Correct Credentials", Toast.LENGTH_LONG).show();
                                         }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
-                                        Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
                                     }
                                 }
                             },
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Toast.makeText(getApplicationContext(),"Error Connecting Server",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), "Error Connecting Server", Toast.LENGTH_LONG).show();
                                 }
-                            }){
+                            }) {
                         @Nullable
                         @Override
                         protected Map<String, String> getParams() throws AuthFailureError {
-                            Map<String, String> params=new HashMap<>();
-                            params.put("phone_number",number.getText().toString());
-                            params.put("password",password.getText().toString());
+                            Map<String, String> params = new HashMap<>();
+                            params.put("phone_number", number.getText().toString());
+                            params.put("password", password.getText().toString());
                             return params;
                         }
                     };
-                    RequestQueue queue= Volley.newRequestQueue(getApplicationContext());
+                    RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
                     queue.add(request);
-
-
-
-
                 }
+
+            }
+        });
+        signIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
         show.setOnClickListener(new View.OnClickListener() {

@@ -71,7 +71,7 @@ public class ContactFragment extends Fragment {
         }else{
             requestPermissionLauncher.launch(Manifest.permission.READ_CONTACTS);
         }
-        StringRequest request=new StringRequest(Request.Method.GET, "http://192.168.0.101/assignment_3/getphone.php",
+        StringRequest request=new StringRequest(Request.Method.GET, "http://192.168.0.124/assignment_3/getphone.php",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

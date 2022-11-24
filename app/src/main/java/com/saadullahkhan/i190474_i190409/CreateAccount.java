@@ -113,7 +113,7 @@ public class CreateAccount extends AppCompatActivity {
                     }
                     StringRequest request=new StringRequest(
                             Request.Method.POST,
-                            "http://192.168.0.101/assignment_3/insert.php",
+                            "http://192.168.0.124/assignment_3/insert.php",
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
