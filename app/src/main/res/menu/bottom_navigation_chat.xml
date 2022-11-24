@@ -4,5 +4,9 @@
         android:icon="@drawable/contacts_icon"
         android:title="Contacts"
         />
+    <item android:id="@+id/bcChat"
+        android:icon="@drawable/chat_icon"
+        android:title="Chats"
+        />
 
 </menu>

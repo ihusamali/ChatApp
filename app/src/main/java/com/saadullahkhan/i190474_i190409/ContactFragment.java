@@ -1,13 +1,10 @@
 package com.saadullahkhan.i190474_i190409;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +15,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -42,7 +38,7 @@ import java.util.List;
 public class ContactFragment extends Fragment {
     SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView contactsRecycler;
-    ChatListAdapter chatListAdapter;
+    ContactListAdapter contactListAdapter;
     List<User> ls;
     List<User> contactsDataBase;
     List<String> numbers;
@@ -111,9 +107,9 @@ public class ContactFragment extends Fragment {
         RequestQueue queue= Volley.newRequestQueue(getContext());
         queue.add(request);
         contactsRecycler = getView().findViewById(R.id.contactsRecycler);
-        chatListAdapter = new ChatListAdapter(ls, getActivity());
+        contactListAdapter = new ContactListAdapter(ls, getActivity());
         contactsRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        contactsRecycler.setAdapter(chatListAdapter);
+        contactsRecycler.setAdapter(contactListAdapter);
         swipeRefreshLayout = getView().findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -127,7 +123,7 @@ public class ContactFragment extends Fragment {
                         ls.add(new User(contactsDataBase.get(i).getName(), contactsDataBase.get(i).getNumber(), null, null,contactsDataBase.get(i).getId()));
                     }
                 }
-                chatListAdapter.notifyItemChanged(ls.size()-1);
+                contactListAdapter.notifyItemChanged(ls.size()-1);
                 swipeRefreshLayout.setRefreshing(false);
             }
         });

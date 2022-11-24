@@ -3,7 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/black"
-    android:orientation="vertical">
+    android:orientation="horizontal"
+    android:weightSum="1">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_weight="0.1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/image_icon"
+        />
+    <LinearLayout
+        android:layout_weight="0.9"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
     <TextView
         android:id="@+id/nameRowChat"
         android:layout_width="match_parent"
@@ -16,5 +28,6 @@
         android:layout_height="30dp"
         android:textColor="@color/white"
         />
+    </LinearLayout>
 
 </LinearLayout>

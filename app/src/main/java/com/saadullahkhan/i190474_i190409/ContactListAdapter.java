@@ -11,17 +11,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyViewHolder>{
+public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.MyViewHolder>{
     List<User> ls;
     Context c;
-    public ChatListAdapter(List<User> ls, Context c ) {
+    public ContactListAdapter(List<User> ls, Context c ) {
         this.ls = ls;
         this.c = c;
     }
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View row = LayoutInflater.from(c).inflate(R.layout.row_chat_list,parent,false);
+        View row = LayoutInflater.from(c).inflate(R.layout.row_contact_list,parent,false);
         return new MyViewHolder(row);
     }
 
