@@ -9,6 +9,7 @@ import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
@@ -29,10 +30,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.jitsi.meet.sdk.JitsiMeetActivity;
+import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -61,9 +66,14 @@ public class ContactFragment extends Fragment {
     );
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        Home activity = (Home) getActivity();
         ls = new ArrayList<>();
         numbers = new ArrayList<>();
         contactsDataBase = new ArrayList<>();
+        contactsRecycler = getView().findViewById(R.id.contactsRecycler);
+        contactListAdapter = new ContactListAdapter(ls, getActivity());
+        contactsRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        contactsRecycler.setAdapter(contactListAdapter);
         if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS)== PackageManager.PERMISSION_GRANTED) {
             GetNumber();
         }else{
@@ -85,9 +95,10 @@ public class ContactFragment extends Fragment {
                                     if(!activity.getId().equals(contact.getString("id"))){
                                         byte[] y = Base64.getDecoder().decode(contact.getString("dp"));
                                         contactsDataBase.add(new User(contact.getString("name"),contact.getString("phone_number"),null,BitmapFactory.decodeByteArray(y, 0, y.length),contact.getString("id")));
-//                                    if(numbers.contains(contact.getString("phone_number"))) {
-//                                        ls.add(new User(contact.getString("name"), contact.getString("phone_number"), null, BitmapFactory.decodeByteArray(y, 0, y.length), contact.getString("id")));
-//                                    }
+                                    if(numbers.contains(contact.getString("phone_number"))) {
+                                        ls.add(new User(contact.getString("name"), contact.getString("phone_number"), null, BitmapFactory.decodeByteArray(y, 0, y.length), contact.getString("id")));
+                                        contactListAdapter.notifyItemChanged(ls.size()-1);
+                                    }
                                     }
                                 }
 
@@ -109,17 +120,13 @@ public class ContactFragment extends Fragment {
                 });
         RequestQueue queue= Volley.newRequestQueue(getContext());
         queue.add(request);
-        contactsRecycler = getView().findViewById(R.id.contactsRecycler);
-        contactListAdapter = new ContactListAdapter(ls, getActivity());
-        contactsRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        contactsRecycler.setAdapter(contactListAdapter);
+
         swipeRefreshLayout = getView().findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 ls.clear();
                 for(int i=0 ; i< contactsDataBase.size();i++){
-                    Home activity = (Home) getActivity();
                     if(numbers.contains(contactsDataBase.get(i).getNumber()) && !activity.getId().equals(contactsDataBase.get(i).getId())) {
                         boolean check = true;
                         for(int j=0;j<ls.size();j++){
@@ -137,6 +144,7 @@ public class ContactFragment extends Fragment {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
+
 
 
     }

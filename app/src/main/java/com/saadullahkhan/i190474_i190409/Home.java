@@ -46,6 +46,7 @@ public class Home extends AppCompatActivity {
     DrawerLayout drawerLayout;
     BottomNavigationView bottomNav;
     String id;
+    SystemDataBase systemDataBase;
     ImageView dp,topDp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +55,14 @@ public class Home extends AppCompatActivity {
         bottomNav = findViewById(R.id.bottomNavigationChat);
         drawer = findViewById(R.id.drawerButton);
         topDp = findViewById(R.id.topDp);
+        systemDataBase = new SystemDataBase(Home.this);
         NavigationView navigationView = findViewById(R.id.nav);
         View header = navigationView.getHeaderView(0);
         username =  header.findViewById(R.id.usernameNav);
         dp =  header.findViewById(R.id.dpNav);
         drawerLayout = findViewById(R.id.drawerLayout);
         id = getIntent().getStringExtra("id");
+        systemDataBase.addId(id);
         StringRequest request=new StringRequest(Request.Method.POST, "http://192.168.0.124/assignment_3/getdp.php",
                 new Response.Listener<String>() {
                     @Override
@@ -155,6 +158,7 @@ public class Home extends AppCompatActivity {
 //                    fragmentTransaction.commit();
                 }
                 if(id == R.id.i3){
+                    systemDataBase.addId("0");
                     finish();
                 }
                 return true ;

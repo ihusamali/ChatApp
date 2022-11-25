@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:background="@color/black"
     android:orientation="horizontal"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:id="@+id/rowContact">
     <View
         android:layout_weight="0.02"
         android:layout_width="0dp"
@@ -22,7 +23,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"/>
     <LinearLayout
-        android:layout_weight="0.86"
+        android:layout_weight="0.7"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -48,5 +49,13 @@
             android:layout_width="match_parent"
             android:layout_height="10dp"/>
     </LinearLayout>
+    <ImageView
+        android:layout_weight="0.16"
+        android:layout_width="0dp"
+        android:src="@drawable/call_icon"
+        android:padding="15dp"
+        android:id="@+id/contactsCallIcon"
+        android:layout_gravity="center"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

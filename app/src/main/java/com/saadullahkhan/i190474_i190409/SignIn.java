@@ -36,6 +36,7 @@ public class SignIn extends AppCompatActivity {
     EditText password,number;
     TextView signUp,forgetPassword;
     Button signIn;
+    SystemDataBase systemDataBase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,7 @@ public class SignIn extends AppCompatActivity {
         hide = findViewById(R.id.hideSignIn);
         password = findViewById(R.id.passwordSignIn);
         number = findViewById(R.id.numberSignIn);
+        systemDataBase = new SystemDataBase(SignIn.this);
         signUp = findViewById(R.id.signUpSignIn);
         signIn = findViewById(R.id.signInButton);
         forgetPassword = findViewById(R.id.forgetPassword);
@@ -130,5 +132,18 @@ public class SignIn extends AppCompatActivity {
                 password.setTransformationMethod(PasswordTransformationMethod.getInstance());
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(!systemDataBase.getId().equals("0")){
+            String id = systemDataBase.getId();
+            Intent intent = new Intent(SignIn.this,Home.class);
+            intent.putExtra("id",id);
+            startActivity(intent);
+        }
+
+
     }
 }
