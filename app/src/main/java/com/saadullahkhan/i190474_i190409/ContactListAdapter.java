@@ -45,7 +45,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
             public void onClick(View view) {
                 Intent intent = new Intent(c.getApplicationContext(),SpecificChat.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                intent.putExtra("id",ls.get(holder.getBindingAdapterPosition()).getId());
+                intent.putExtra("id",ls.get(holder.getAdapterPosition()).getId());
                 c.getApplicationContext().startActivity(intent);
             }
         });
@@ -54,7 +54,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
             public void onClick(View view) {
                 Intent intent= new Intent(c.getApplicationContext(),CallActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                intent.putExtra("id",ls.get(holder.getBindingAdapterPosition()).getId());
+                intent.putExtra("id",ls.get(holder.getAdapterPosition()).getId());
                 c.getApplicationContext().startActivity(intent);
 
             }
