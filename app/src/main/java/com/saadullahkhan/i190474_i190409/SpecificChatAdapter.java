@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class SpecificChatAdapter extends RecyclerView.Adapter<ContactListAdapter.MyViewHolder>{
+public class SpecificChatAdapter extends RecyclerView.Adapter<SpecificChatAdapter.MyViewHolder>{
     List<Messages> ls;
     Context c;
     public SpecificChatAdapter(List<Messages> ls, Context c ) {
@@ -21,14 +21,14 @@ public class SpecificChatAdapter extends RecyclerView.Adapter<ContactListAdapter
     }
     @NonNull
     @Override
-    public ContactListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SpecificChatAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View row = LayoutInflater.from(c).inflate(R.layout.row_message_chat,parent,false);
-        return new ContactListAdapter.MyViewHolder(row);
+        return new SpecificChatAdapter.MyViewHolder(row);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ContactListAdapter.MyViewHolder holder, int position) {
-        //holder.message.setText(ls.get(position).getMessage());
+    public void onBindViewHolder(@NonNull SpecificChatAdapter.MyViewHolder holder, int position) {
+        holder.message.setText(ls.get(position).getMessage());
     }
 
     @Override
@@ -36,11 +36,9 @@ public class SpecificChatAdapter extends RecyclerView.Adapter<ContactListAdapter
         return ls.size();
     }
     public static class MyViewHolder extends RecyclerView.ViewHolder{
-        //public ImageView mImageView;
         public TextView message;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            //mImageView = itemView.findViewById(R.id.sideimage);
             message = itemView.findViewById(R.id.singlemessage);
         }
 

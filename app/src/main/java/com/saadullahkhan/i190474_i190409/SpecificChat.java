@@ -2,6 +2,8 @@ package com.saadullahkhan.i190474_i190409;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -35,6 +37,8 @@ public class SpecificChat extends AppCompatActivity {
     EditText message;
     ImageView dp,callButton,sendButton;
     SystemDataBase systemDataBase;
+    RecyclerView chatRecycler;
+    SpecificChatAdapter specificChatAdapter;
     List<Messages> messageList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +46,15 @@ public class SpecificChat extends AppCompatActivity {
         setContentView(R.layout.activity_specific_chat);
         name = findViewById(R.id.nameChat);
         dp = findViewById(R.id.topDpChat);
+        messageList = new ArrayList<>();
         message = findViewById(R.id.messageBlockChat);
         sendButton = findViewById(R.id.sendButtonChat);
         callButton = findViewById(R.id.callButtonChat);
-        messageList = new ArrayList<>();
+        chatRecycler = findViewById(R.id.chatRecycler);
+        specificChatAdapter = new SpecificChatAdapter(messageList, getApplicationContext());
+        chatRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        chatRecycler.setAdapter(specificChatAdapter);
+        getMessageData();
         systemDataBase = new SystemDataBase(SpecificChat.this);
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +120,8 @@ public class SpecificChat extends AppCompatActivity {
 
                                             Toast.makeText(getApplicationContext(),"Chat Sent",Toast.LENGTH_LONG).show();
                                             message.setText("");
+                                            messageList.clear();
+                                            getMessageData();
                                         }
                                         else{
                                             Toast.makeText(
@@ -184,7 +195,7 @@ public class SpecificChat extends AppCompatActivity {
                                         messageList.add( new Messages( jsonData.getJSONArray(i).getString(0),Integer.parseInt(jsonData.getJSONArray(i).getString(1))));
                                     }
 
-//                                    mAdapter.notifyDataSetChanged();
+                                    specificChatAdapter.notifyItemChanged(messageList.size()-1);
                                 }
                             }
                             else
