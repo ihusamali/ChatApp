@@ -76,7 +76,7 @@ public class Home extends AppCompatActivity {
                                 byte[] y = Base64.getDecoder().decode(details.getString("dp"));
                                 dp.setImageBitmap(BitmapFactory.decodeByteArray(y, 0, y.length));
                                 topDp.setImageBitmap(BitmapFactory.decodeByteArray(y, 0, y.length));
-                                Toast.makeText(getApplicationContext(),details.getString("name"),Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(),"Welcome "+details.getString("name"),Toast.LENGTH_LONG).show();
                                 username.setText(details.getString("name"));
                             }
                             else{
