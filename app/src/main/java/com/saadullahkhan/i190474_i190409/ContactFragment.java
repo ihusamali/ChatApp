@@ -3,6 +3,7 @@ package com.saadullahkhan.i190474_i190409;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.LayoutInflater;
@@ -33,6 +34,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 public class ContactFragment extends Fragment {
@@ -81,10 +83,11 @@ public class ContactFragment extends Fragment {
                                     JSONObject contact=contacts.getJSONObject(i);
                                     Home activity = (Home) getActivity();
                                     if(!activity.getId().equals(contact.getString("id"))){
-                                    contactsDataBase.add(new User(contact.getString("name"),contact.getString("phone_number"),null,null,contact.getString("id")));
-                                    if(numbers.contains(contact.getString("phone_number"))) {
-                                        ls.add(new User(contact.getString("name"), contact.getString("phone_number"), null, null, contact.getString("id")));
-                                    }
+                                        byte[] y = Base64.getDecoder().decode(contact.getString("dp"));
+                                        contactsDataBase.add(new User(contact.getString("name"),contact.getString("phone_number"),null,BitmapFactory.decodeByteArray(y, 0, y.length),contact.getString("id")));
+//                                    if(numbers.contains(contact.getString("phone_number"))) {
+//                                        ls.add(new User(contact.getString("name"), contact.getString("phone_number"), null, BitmapFactory.decodeByteArray(y, 0, y.length), contact.getString("id")));
+//                                    }
                                     }
                                 }
 
@@ -114,13 +117,20 @@ public class ContactFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                for(int i=0 ; i< ls.size();i++){
-                    ls.remove(i);
-                }
+                ls.clear();
                 for(int i=0 ; i< contactsDataBase.size();i++){
                     Home activity = (Home) getActivity();
                     if(numbers.contains(contactsDataBase.get(i).getNumber()) && !activity.getId().equals(contactsDataBase.get(i).getId())) {
-                        ls.add(new User(contactsDataBase.get(i).getName(), contactsDataBase.get(i).getNumber(), null, null,contactsDataBase.get(i).getId()));
+                        boolean check = true;
+                        for(int j=0;j<ls.size();j++){
+                            if(ls.get(j).equals(contactsDataBase.get(i).getNumber())){
+                                check = false;
+                                break;
+                            }
+                        }
+                        if(check) {
+                            ls.add(new User(contactsDataBase.get(i).getName(), contactsDataBase.get(i).getNumber(), null, contactsDataBase.get(i).getDp(), contactsDataBase.get(i).getId()));
+                        }
                     }
                 }
                 contactListAdapter.notifyItemChanged(ls.size()-1);
@@ -151,5 +161,4 @@ public class ContactFragment extends Fragment {
         }
         phones.close();
     }
-
 }

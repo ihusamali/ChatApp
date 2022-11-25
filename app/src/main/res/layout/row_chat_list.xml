@@ -11,7 +11,7 @@
         android:layout_height="match_parent"/>
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_gravity="center"
-        android:id="@+id/rowContactDp"
+        android:id="@+id/rowChatDp"
         android:layout_weight="0.1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="10dp"/>
     <TextView
-        android:id="@+id/nameRowContact"
+        android:id="@+id/nameRowChat"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:textColor="@color/white"
@@ -39,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="10dp"/>
     <TextView
-        android:id="@+id/numberRowContact"
+        android:id="@+id/numberRowChat"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:textColor="@color/white"

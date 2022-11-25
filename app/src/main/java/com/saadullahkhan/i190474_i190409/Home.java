@@ -29,6 +29,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
@@ -45,13 +46,14 @@ public class Home extends AppCompatActivity {
     DrawerLayout drawerLayout;
     BottomNavigationView bottomNav;
     String id;
-    ImageView dp;
+    ImageView dp,topDp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         bottomNav = findViewById(R.id.bottomNavigationChat);
         drawer = findViewById(R.id.drawerButton);
+        topDp = findViewById(R.id.topDp);
         NavigationView navigationView = findViewById(R.id.nav);
         View header = navigationView.getHeaderView(0);
         username =  header.findViewById(R.id.usernameNav);
@@ -70,6 +72,7 @@ public class Home extends AppCompatActivity {
                                 JSONObject details=arr.getJSONObject(0);
                                 byte[] y = Base64.getDecoder().decode(details.getString("dp"));
                                 dp.setImageBitmap(BitmapFactory.decodeByteArray(y, 0, y.length));
+                                topDp.setImageBitmap(BitmapFactory.decodeByteArray(y, 0, y.length));
                                 Toast.makeText(getApplicationContext(),details.getString("name"),Toast.LENGTH_LONG).show();
                                 username.setText(details.getString("name"));
                             }
@@ -99,10 +102,38 @@ public class Home extends AppCompatActivity {
         RequestQueue queue= Volley.newRequestQueue(getApplicationContext());
         queue.add(request);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerChat,new ContactFragment(),"Contacts").commit();
-        bottomNav.getMenu().findItem(R.id.bcContact).setChecked(true);
-        NavigationView navView = findViewById(R.id.nav);
 
+
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerChat,new ChatFragment(),"chats").addToBackStack(null).commit();
+        bottomNav.getMenu().findItem(R.id.bcChat).setChecked(true);
+
+        bottomNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if(item.getItemId() == R.id.bcChat){
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerChat,new ChatFragment(),"chats").addToBackStack(null).commit();
+                }else if(item.getItemId() == R.id.bcContact){
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerChat,new ContactFragment(),"contacts").addToBackStack(null).commit();
+                }
+                return true;
+            }
+        });
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                if(getSupportFragmentManager().findFragmentByTag("chats") != null && getSupportFragmentManager().findFragmentByTag("chats").isVisible()){
+                    bottomNav.getMenu().findItem(R.id.bcChat).setChecked(true);
+                }else if(getSupportFragmentManager().findFragmentByTag("contacts") != null && getSupportFragmentManager().findFragmentByTag("contacts").isVisible()){
+                    bottomNav.getMenu().findItem(R.id.bcContact).setChecked(true);
+                }
+            }
+        });
+
+
+
+
+        NavigationView navView = findViewById(R.id.nav);
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
