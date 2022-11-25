@@ -24,7 +24,7 @@ public class SystemDataBase extends SQLiteOpenHelper {
 
 
         sqLiteDatabase.execSQL(query);
-        query = "INSERT INTO information (userid) VALUES (1)";
+        query = "INSERT INTO information (userid) VALUES (0)";
         sqLiteDatabase.execSQL(query);
 
     }
