@@ -10,6 +10,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import org.jitsi.meet.sdk.JitsiMeet;
 import org.jitsi.meet.sdk.JitsiMeetActivity;
@@ -21,10 +24,12 @@ import java.net.URL;
 public class CallActivity extends AppCompatActivity {
     String roomID;
     SystemDataBase systemDataBase;
+    Button back;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_call);
+        back = findViewById(R.id.callBackButton);
         systemDataBase = new SystemDataBase(CallActivity.this);
         if(Integer.parseInt(systemDataBase.getId()) < Integer.parseInt(getIntent().getStringExtra("id"))){
             roomID = systemDataBase.getId()+getIntent().getStringExtra("id");
@@ -45,6 +50,12 @@ public class CallActivity extends AppCompatActivity {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 //    private void notificationDialog(){
 //        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

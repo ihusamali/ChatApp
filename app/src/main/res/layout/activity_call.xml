@@ -6,5 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".CallActivity"
     android:background="@color/black">
+    <View
+        android:layout_width="100dp"
+        android:layout_height="60dp"/>
+    <android.widget.Button
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:id="@+id/callBackButton"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:background="@drawable/yellowbutton"
+        android:clickable="true"
+        android:text="BACK"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:onClick="onClickSignIn" />
 
 </LinearLayout>
